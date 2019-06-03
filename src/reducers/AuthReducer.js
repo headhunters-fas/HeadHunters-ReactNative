@@ -9,7 +9,6 @@ import {
 const INITIAL_STATE = {
     email: '',
     password: '',
-    user: null,
     error: {
         password: '',
         username: ''
@@ -27,7 +26,7 @@ export default (state = INITIAL_STATE, action) => {
         case LOGIN_USER:
             return { ...state, loading: true, error: '' };
         case LOGIN_USER_SUCCESS:
-            return { ...state, ...INITIAL_STATE, user: action.payload }; //we reset all the state in the reducer
+            return { ...state, ...INITIAL_STATE }; //we reset all the state in the reducer
         case LOGIN_USER_FAIL:
             return { ...state, error: action.payload, password: '', loading: false };
         default:                                        

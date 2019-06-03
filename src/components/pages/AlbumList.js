@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, AsyncStorage } from 'react-native';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
@@ -20,15 +20,20 @@ class AlbumList extends Component {
   }
  
   async componentDidMount() {
-    const { limit } = this.state;
-    const { genre } = this.props; 
-    console.log('title', this.props.title);
-
-    axios.get(`https://albumapp-api.herokuapp.com/albums?genre=${genre}&offset=0&limit=${limit}`)
-      .then(response => this.setState({ albums: response.data, loading: false }));
+    const DEMO_TOKEN = await AsyncStorage.getItem('id_token');
+    // const { limit } = this.state;
+    // const { genre } = this.props; 
+    // console.log('title', this.props.title);
     
-    axios.get(`https://albumapp-api.herokuapp.com/albums?genre=${genre}`)
-      .then(response => this.setState({ albumsT: response.data }));  
+    axios.get('http://10.0.2.2:8080/api/albums', {
+      headers: {
+        Authorization: DEMO_TOKEN //the token is a variable which holds the token
+      }
+    })
+    .then(response => this.setState({ albums: response.data, loading: false }));
+    
+    /* axios.get(`https://albumapp-api.herokuapp.com/albums?genre=${genre}`)
+      .then(response => this.setState({ albumsT: response.data })); */ 
   }
 
   renderAlbums() {
@@ -37,7 +42,7 @@ class AlbumList extends Component {
     );
   }
 
-  renderMore() {
+  /* renderMore() {
     const { limit } = this.state;
     const { genre } = this.props; 
     
@@ -47,9 +52,9 @@ class AlbumList extends Component {
       .then(response => { this.setState({ albums: response.data, loading: false }); });
 
     this.setState({ limit: limit + 2, loading: true }); //this resets the component, but won't unmount it
-  }
+  } */
 
-  renderButton() {
+  /* renderButton() {
     const { albums, albumsT } = this.state;
 
     if (albums.length !== albumsT.length) {
@@ -62,11 +67,11 @@ class AlbumList extends Component {
           </CardSection>
         </Fade>);
     }
-  }
+  } */
 
   render() {
+    console.log(this.state.albums);
     if (this.state.loading) {
-      
       return (
         <View style={styles.viewStyle}>
           <Spinner color={'white'} size={37} type={'Circle'} />
@@ -77,7 +82,7 @@ class AlbumList extends Component {
     return (
       <ScrollView style={{ flex: 1, backgroundColor: '#0277BD' }}>
         {this.renderAlbums()}
-        {this.renderButton()}
+        {/*this.renderButton()*/}
       </ScrollView>
     );
   }

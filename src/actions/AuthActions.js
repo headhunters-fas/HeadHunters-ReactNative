@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import {
     EMAIL_CHANGED,
@@ -13,6 +14,7 @@ import {
 } from './types';
 
  //curly braces allows us to specify which type we want to import as there are many 
+const STORAGE_KEY = 'id_token';
 
 export const emailChanged = (text) => {
     return {
@@ -63,10 +65,11 @@ const loginUserFail = (dispatch, error) => {
     });
 };
 
-const loginUserSuccess = (dispatch, user) => {
+const loginUserSuccess = (dispatch, res) => {
+    onValueChange(STORAGE_KEY, res.data.token);
+
     dispatch({
-        type: LOGIN_USER_SUCCESS,
-        payload: user
+        type: LOGIN_USER_SUCCESS
     });
 
     Actions.main();
@@ -88,3 +91,10 @@ const signupUserSuccess = (dispatch, user) => {
     Actions.login();
 };
 
+const onValueChange = (item, selectedValue) => {
+    try {
+      AsyncStorage.setItem(item, selectedValue);
+    } catch (error) {
+      console.log('AsyncStorage error: ' + error.message);
+    }
+};
