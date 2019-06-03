@@ -1,6 +1,6 @@
-import { ToastAndroid } from 'react-native';
-import firebase from 'firebase';
+import { ToastAndroid, AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import axios from 'axios';
 import {
     ACCOUNT_SELECTED,
     GENRE_CHANGED,
@@ -9,14 +9,20 @@ import {
 } from './types';
 
 
-export const albumAdd = ({ title, artist, thumbnail_image, image, url, songs }) => {
-    const { currentUser } = firebase.auth();
-
+export const albumAdd = (album) => {
     return () => {
-        console.log('push', 'pusheando');     
-        firebase.database().ref(`/users/${currentUser.uid}/albums`)
-        .push({ title, artist, thumbnail_image, image, url, songs })
-        .then(() => toastMessage(`¡Has agregado ${title} a la playlist!`));
+        AsyncStorage.getItem('id_token')
+        .then(res => { 
+            console.log(res);
+            axios.post('http://10.0.2.2:8080/api/users/albums', album, {
+                headers: {
+                    Authorization: res //the token is a variable which holds the token
+                }
+            })
+            .then((resp) => { console.log(resp); toastMessage(`¡Has agregado ${album.title} a la playlist!`); })
+            .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
     };
 };
 

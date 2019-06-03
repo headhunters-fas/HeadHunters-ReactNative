@@ -64,20 +64,20 @@ export class SignForm extends Component {
 
 export const styles = {
     errorTextStyle: {
-        fontSize: 20,
+        fontSize: 15,
         color: 'red'
     },
 
     logoContainer: {
         alignItems: 'center',
         marginBottom: 2,
-        marginTop: 2
+        marginTop: 0
     },
     signupTextCont: {
         flexGrow: 1,
         alignItems: 'flex-end',
         justifyContent: 'center',
-        paddingVertical: 30,
+        paddingVertical: 10,
         flexDirection: 'row'
     },
     singupText: {

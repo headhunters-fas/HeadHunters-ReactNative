@@ -14,12 +14,19 @@ class AlbumSum extends Component {
     } */
 
     OnButtonPress() {
-        const { title, artist, thumbnailImage, image, url, songList, id, likes } = this.props.albumData;  
+        const { title, artist, thumbnailImage, image, url, songList, id, likes } = this.props.albumData; 
+        const album = {
+            title,
+            artist,
+            thumbnailImage,
+            image,
+            url,
+            songList
+        };
         
-        this.props.albumAdd({ title, artist, thumbnailImage, image, url, songList });
-        console.log(this.props.albumData);
+        this.props.albumAdd(album);
 
-        Helpers.updateAlbumLikes(id, likes);
+        // Helpers.updateAlbumLikes(id, likes);
     }
 
     renderButton() {    

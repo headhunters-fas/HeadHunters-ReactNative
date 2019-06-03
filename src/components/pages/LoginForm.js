@@ -77,7 +77,7 @@ class LoginForm extends Component {
         return (
             <View style={{ flex: 1, backgroundColor: '#0277BD' }}>
                 <View style={styles.logoContainer}>
-                    <Logo title="Album App" />
+                    <Logo title="Login" />
                 </View>
                 
                 <SignForm 
