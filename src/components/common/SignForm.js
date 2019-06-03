@@ -18,6 +18,7 @@ export class SignForm extends Component {
                         value={this.props.email}
                     />
                 </CardSection>
+                {this.props.EmailError}
                 <CardSection>
                     <Input
                         secureTextEntry
@@ -69,8 +70,8 @@ export const styles = {
 
     logoContainer: {
         alignItems: 'center',
-        marginBottom: 20,
-        marginTop: 20
+        marginBottom: 2,
+        marginTop: 2
     },
     signupTextCont: {
         flexGrow: 1,
