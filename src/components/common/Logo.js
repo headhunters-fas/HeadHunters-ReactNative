@@ -1,13 +1,13 @@
 import React from 'react';
 import { Image, View, Text } from 'react-native';
-import AlbaLogo from '../../img/AlbumLogo.png';
+import HeadHuntersLogo from '../../img/HeadHuntersLogo.png';
 
 const Logo = ({ title }) => {
     return (
         <View style={styles.container}>
             <Image
-                style={{ width: 150, height: 150 }}
-                source={AlbaLogo}
+                style={{ width: 250, height: 180 }}
+                source={HeadHuntersLogo}
             />
             <Text style={styles.logoText}>{title}</Text>
         </View> 

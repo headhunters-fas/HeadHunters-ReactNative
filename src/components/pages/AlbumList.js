@@ -24,6 +24,7 @@ class AlbumList extends Component {
     // const { limit } = this.state;
     // const { genre } = this.props; 
     // console.log('title', this.props.title);
+    console.log(DEMO_TOKEN);
     
     axios.get('http://10.0.2.2:8080/api/albums', {
       headers: {
