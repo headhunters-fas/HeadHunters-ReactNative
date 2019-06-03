@@ -3,7 +3,8 @@ import { View } from 'react-native';
 import { CardSection, Input } from '.';
 
 export class SignForm extends Component {
-    render() {
+
+    baseForm = (view) => {
         return (
             <View>
                 <CardSection>
@@ -26,8 +27,37 @@ export class SignForm extends Component {
                         value={this.props.password}
                     />
                 </CardSection>    
+                {view}
             </View>
+        ); 
+    }
+
+    loginForm = () => {
+        return (
+            this.baseForm()
         );
+    }
+
+    signUpForm = () => {
+        return (
+            this.baseForm(
+                <View>
+                    <CardSection>
+                        <Input
+                            secureTextEntry
+                            label="Password"
+                            placeholder="reescribir contraseña"
+                            onChangeText={this.props.ConfirmPassword}
+                            value={this.props.confirmPassord}
+                        />
+                    </CardSection>   
+                </View>
+            )
+        );
+    }
+
+    render() {
+        return this.props.ConfirmPassword === undefined ? this.loginForm() : this.signUpForm();
     }
 }
 
@@ -46,7 +76,7 @@ export const styles = {
         flexGrow: 1,
         alignItems: 'flex-end',
         justifyContent: 'center',
-        paddingVertical: 66,
+        paddingVertical: 30,
         flexDirection: 'row'
     },
     singupText: {

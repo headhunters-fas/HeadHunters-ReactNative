@@ -4,13 +4,14 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { emailChanged,
      passwordChanged,
+     confirmPasswordChanged,
      signupUser } from '../../actions';
 import { CardSection, Button, Logo } from '../common';
 import { SignForm, styles } from '../common/SignForm';
 import Spinner from 'react-native-spinkit';
 
 class SignupForm extends Component {
-    onEmailChangeText(text) {
+    onEmailChangeText(text) {                     
         this.props.emailChanged(text);
     }   
 
@@ -18,10 +19,20 @@ class SignupForm extends Component {
         this.props.passwordChanged(text);
     }
 
-    onButtonPress() {
-        const { email, password, name, lastname } = this.props;
+    onConfirmPassword(text) {
+        this.props.confirmPasswordChanged(text);
+    }
 
-        this.props.signupUser({ email, password, name, lastname });
+    onButtonPress() {
+        const { email, password, confirmPassword } = this.props;
+
+        const newUser = {
+            username: email,
+            password,
+            confirmPassword
+        };
+
+        this.props.signupUser(newUser);
     }
 
     logIn() {
@@ -65,7 +76,11 @@ class SignupForm extends Component {
                     <Logo title="Registrar nueva cuenta" />                  
                 </View>
                
-                <SignForm Email={this.onEmailChangeText.bind(this)} Password={this.onPasswordChange.bind(this)} />   
+                <SignForm 
+                    Email={this.onEmailChangeText.bind(this)} 
+                    Password={this.onPasswordChange.bind(this)} 
+                    ConfirmPassword={this.onConfirmPassword.bind(this)}    
+                />   
 
                 {this.renderError()}
                 {this.renderButton()} 
@@ -81,13 +96,14 @@ class SignupForm extends Component {
 }
 
 const mapStateTpProps = ({ sinup }) => {
-    const { email, password, error, loading } = sinup;
+    const { email, password, confirmPassword, error, loading } = sinup;
     
-    return { email, password, error, loading };
+    return { email, password, confirmPassword, error, loading };
 };
 
 export default connect(mapStateTpProps, {
     emailChanged,
     passwordChanged,
+    confirmPasswordChanged,
     signupUser
 })(SignupForm);
