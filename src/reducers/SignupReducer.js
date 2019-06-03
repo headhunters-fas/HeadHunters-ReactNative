@@ -12,7 +12,11 @@ const INITIAL_STATE = {
     password: '',
     confirmPassword: '',
     user: null,
-    error: '',
+    error: {
+        password: '',
+        username: '',
+        message: ''
+    },
     loading: false
 }; 
 

@@ -18,20 +18,37 @@ class LoginForm extends Component {
 
     onButtonPress() {
         const { email, password } = this.props;
-        
-        this.props.loginUser({ email, password });
+
+        const newUser = {
+            username: email,
+            password,
+        };
+
+        this.props.loginUser(newUser);
     }
 
     signUp() {
         Actions.signup();
     }
 
-    renderError() {
-        if (this.props.error) {
+    renderPasswordError() {
+        if (this.props.error.password !== '') {
             return (
                 <View style={{ alignItems: 'center' }}>
                     <Text style={styles.errorTextStyle}>
-                        {this.props.error}
+                        {this.props.error.password}
+                    </Text>
+                </View>
+            );
+        }
+    }
+
+    renderEmailError() {
+        if (this.props.error.username !== '') {
+            return (
+                <View style={{ alignItems: 'center' }}>
+                    <Text style={styles.errorTextStyle}>
+                        {this.props.error.username}
                     </Text>
                 </View>
             );
@@ -63,9 +80,13 @@ class LoginForm extends Component {
                     <Logo title="Album App" />
                 </View>
                 
-                <SignForm Email={this.onEmailChangeText.bind(this)} Password={this.onPasswordChange.bind(this)} />  
+                <SignForm 
+                    Email={this.onEmailChangeText.bind(this)} 
+                    EmailError={this.renderEmailError()}
+                    Password={this.onPasswordChange.bind(this)} 
+                />  
 
-                {this.renderError()}
+                {this.renderPasswordError()}
                 {this.renderButton()} 
                 <CardSection>
                     <View style={styles.signupTextCont}>

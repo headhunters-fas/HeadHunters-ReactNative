@@ -35,27 +35,32 @@ export const confirmPasswordChanged = (text) => {
     };
 };
 
-export const loginUser = ({ email, password }) => {
-    return (dispatch) => {
-        dispatch({ type: LOGIN_USER });
-        
-        firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(user => loginUserSuccess(dispatch, user))
-        .catch(() => loginUserFail(dispatch));
-    };
+export const loginUser = (newUser) => async dispatch => {
+    dispatch({ type: LOGIN_USER });
+    try {
+        const res = await axios.post('http://10.0.2.2:8080/api/users/login', newUser);
+        loginUserSuccess(dispatch, res);
+    } catch (error) {
+        loginUserFail(dispatch, error.response.data);
+    }
 };
 
-export const signupUser = (newUser) => {
-    return (dispatch) => {
-        dispatch({ type: SIGNUP_USER });
-        axios.post("http://10.0.2.2:8080/api/users/register", newUser)
-        .then(user => signupUserSuccess(dispatch, user))
-        .catch(error => signupUserFail(dispatch, error.response.data));
-    };
+export const signupUser = (newUser) => async dispatch => {
+    dispatch({ type: SIGNUP_USER });
+    try {
+        const res = await axios.post('http://10.0.2.2:8080/api/users/register', newUser);
+        signupUserSuccess(dispatch, res);
+    } catch (error) {
+        signupUserFail(dispatch, error.response.data);
+    }
 };
 
-const loginUserFail = (dispatch) => {
-    dispatch({ type: LOGIN_USER_FAIL });
+
+const loginUserFail = (dispatch, error) => {
+    dispatch({ 
+        type: LOGIN_USER_FAIL,
+        payload: error
+    });
 };
 
 const loginUserSuccess = (dispatch, user) => {
@@ -80,6 +85,6 @@ const signupUserSuccess = (dispatch, user) => {
         payload: user
     });
 
-    Actions.main();
+    Actions.login();
 };
 

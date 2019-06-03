@@ -39,12 +39,25 @@ class SignupForm extends Component {
         Actions.login();
     }
 
-    renderError() {
-        if (this.props.error) {
+    renderPasswordError() {
+        if (this.props.error.password !== '') {
             return (
                 <View style={{ alignItems: 'center' }}>
                     <Text style={styles.errorTextStyle}>
-                        {this.props.error}
+                        {this.props.error.password}
+                    </Text>
+                </View>
+            );
+        }
+    }
+
+    renderEmailError() {
+        if (this.props.error.username !== '' || this.props.error.message !== '') {
+            return (
+                <View style={{ alignItems: 'center' }}>
+                    <Text style={styles.errorTextStyle}>
+                        {this.props.error.username}
+                        {this.props.error.message}
                     </Text>
                 </View>
             );
@@ -78,11 +91,12 @@ class SignupForm extends Component {
                
                 <SignForm 
                     Email={this.onEmailChangeText.bind(this)} 
+                    EmailError={this.renderEmailError()}
                     Password={this.onPasswordChange.bind(this)} 
                     ConfirmPassword={this.onConfirmPassword.bind(this)}    
                 />   
 
-                {this.renderError()}
+                {this.renderPasswordError()}
                 {this.renderButton()} 
                 <CardSection>
                     <View style={styles.signupTextCont}>
@@ -97,7 +111,6 @@ class SignupForm extends Component {
 
 const mapStateTpProps = ({ sinup }) => {
     const { email, password, confirmPassword, error, loading } = sinup;
-    
     return { email, password, confirmPassword, error, loading };
 };
 
