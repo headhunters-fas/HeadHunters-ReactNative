@@ -27,13 +27,18 @@ export const albumAdd = (album) => {
 };
 
 export const albumsFetch = () => {
-    const { currentUser } = firebase.auth();
-
     return (dispatch) => {
-        firebase.database().ref(`/users/${currentUser.uid}/albums`)
-        .on('value', snapshot => { //snapshot is an object that describes de data to handle our albums and has access to it
-            dispatch({ type: ALBUM_FETCH_SUCCESS, payload: snapshot.val() });
-        });
+        AsyncStorage.getItem('id_token')
+        .then(res => { 
+            axios.get('http://10.0.2.2:8080/api/users/albums/all', {
+                headers: {
+                    Authorization: res
+                }
+            })
+            .then((resp) => { console.log("ALVUMS", resp); dispatch({ type: ALBUM_FETCH_SUCCESS, payload: resp.data }); })
+            .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
     };
 };
 

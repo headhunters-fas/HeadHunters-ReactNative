@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import Spinner from 'react-native-spinkit';
 import AlbumSum from './AlbumSum';
-import { CardSection, Button } from '../common';
-import Fade from '../effectComponents/Fade';
+
+let DEMO_TOKEN;
 
 class AlbumList extends Component {
   constructor(props) {
@@ -14,27 +14,39 @@ class AlbumList extends Component {
     this.state = {
       albums: [],
       loading: true,
-      limit: 2,
+      genre: '',
       albumsT: [],
     };
   }
  
   async componentDidMount() {
-    const DEMO_TOKEN = await AsyncStorage.getItem('id_token');
-    // const { limit } = this.state;
-    // const { genre } = this.props; 
-    // console.log('title', this.props.title);
-    console.log(DEMO_TOKEN);
+    DEMO_TOKEN = await AsyncStorage.getItem('id_token');
+    const { genre } = this.props; 
+    if (genre !== '') {
+      Actions.refresh({ title: genre });
+    }
     
-    axios.get('http://10.0.2.2:8080/api/albums', {
+    axios.get(`http://10.0.2.2:8080/api/albums?genre=${genre}`, {
       headers: {
         Authorization: DEMO_TOKEN //the token is a variable which holds the token
       }
     })
     .then(response => this.setState({ albums: response.data, loading: false }));
-    
-    /* axios.get(`https://albumapp-api.herokuapp.com/albums?genre=${genre}`)
-      .then(response => this.setState({ albumsT: response.data })); */ 
+  }
+
+  async componentWillReceiveProps(nextProps) {
+    DEMO_TOKEN = await AsyncStorage.getItem('id_token');
+    if (this.state.genre !== nextProps.genre) {
+      axios.get(`http://10.0.2.2:8080/api/albums?genre=${nextProps.genre}`, {
+      headers: {
+        Authorization: DEMO_TOKEN //the token is a variable which holds the token
+      }
+      })
+      .then(response => this.setState({ albums: response.data, loading: false }));
+
+      Actions.refresh({ title: nextProps.genre });
+    }
+    this.setState({ genre: nextProps.genre });
   }
 
   renderAlbums() {
@@ -42,33 +54,6 @@ class AlbumList extends Component {
        <AlbumSum key={album.title} albumData={album} />
     );
   }
-
-  /* renderMore() {
-    const { limit } = this.state;
-    const { genre } = this.props; 
-    
-    console.log(this.state.albums);
-  
-    axios.get(`https://albumapp-api.herokuapp.com/albums?genre=${genre}&offset=0&limit=${limit+2}`)
-      .then(response => { this.setState({ albums: response.data, loading: false }); });
-
-    this.setState({ limit: limit + 2, loading: true }); //this resets the component, but won't unmount it
-  } */
-
-  /* renderButton() {
-    const { albums, albumsT } = this.state;
-
-    if (albums.length !== albumsT.length) {
-      return (
-        <Fade fadeIt={2000}>
-          <CardSection>
-              <Button onPress={this.renderMore.bind(this)}>
-                Cargar más
-              </Button>
-          </CardSection>
-        </Fade>);
-    }
-  } */
 
   render() {
     console.log(this.state.albums);
@@ -83,7 +68,6 @@ class AlbumList extends Component {
     return (
       <ScrollView style={{ flex: 1, backgroundColor: '#0277BD' }}>
         {this.renderAlbums()}
-        {/*this.renderButton()*/}
       </ScrollView>
     );
   }

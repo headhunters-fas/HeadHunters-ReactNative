@@ -1,32 +1,37 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { Text, View, Image } from 'react-native';
-import { albumAdd } from '../../actions';
+import { Text, View, Image, AsyncStorage } from 'react-native';
+import { albumAdd, albumsFetch } from '../../actions';
 import { CardSection, Button, Card } from '../common';
 import { styles } from '../common/AlbumStyles'; 
 import Helpers from '../../lib/helpers';
 
-class AlbumSum extends Component {
-    
-    /* componentDidMount() {
-        this.props.albumsFetch();
-    } */
+let DEMO_TOKEN;
 
-    OnButtonPress() {
+class AlbumSum extends Component {
+
+    async OnButtonPress() {
+        DEMO_TOKEN = await AsyncStorage.getItem('id_token');
         const { title, artist, thumbnailImage, image, url, songList, id, likes } = this.props.albumData; 
+        let songs = [];
+        songList.map(song => 
+            songs.push(song)
+        );
         const album = {
             title,
             artist,
             thumbnailImage,
             image,
             url,
-            songList
+            songList: songs
         };
         
         this.props.albumAdd(album);
 
-        // Helpers.updateAlbumLikes(id, likes);
+        Helpers.updateAlbumLikes(id, likes, DEMO_TOKEN);
+
+        this.props.albumsFetch();
     }
 
     renderButton() {    
@@ -95,4 +100,4 @@ const mapStateToProps = state => {
 };
 
 // when ever any piece of state upodates, the connect helper will rerun mapStateToProps
-export default connect(mapStateToProps, { albumAdd })(AlbumSum);
+export default connect(mapStateToProps, { albumAdd, albumsFetch })(AlbumSum);
