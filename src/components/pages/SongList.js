@@ -25,7 +25,7 @@ class SongList extends Component {
     };
 
     playAlbum(index) {
-        Actions.player({ tracks: this.props.album.songs, album: this.props.album.title, start: index });
+        Actions.player({ tracks: this.props.album.songList, album: this.props.album.title, start: index });
     }
 
     renderFooter = () => {
@@ -76,7 +76,7 @@ class SongList extends Component {
                     backgroundColor: '#0277BD' }}
                 >
                     <FlatList
-                        data={this.props.album.songs}
+                        data={this.props.album.songList}
                         renderItem={({ item, index }) => (
                             <ListItem
                                 titleStyle={{ color: 'white' }}

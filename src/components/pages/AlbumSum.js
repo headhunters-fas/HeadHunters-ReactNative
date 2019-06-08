@@ -11,12 +11,21 @@ let DEMO_TOKEN;
 
 class AlbumSum extends Component {
 
-    async OnButtonPress() {
+    async componentDidMount() {
         DEMO_TOKEN = await AsyncStorage.getItem('id_token');
+        this.props.albumsFetch();
+    }
+    
+    OnButtonPress() {
         const { title, artist, thumbnailImage, image, url, songList, id, likes } = this.props.albumData; 
         let songs = [];
         songList.map(song => 
-            songs.push(song)
+            songs.push({
+                albumArtUrl: song.albumArtUrl,
+                artist: song.artist,
+                audioUrl: song.audioUrl,
+                title: song.title
+            })
         );
         const album = {
             title,
@@ -35,13 +44,15 @@ class AlbumSum extends Component {
     }
 
     renderButton() {    
-        /* if (this.props.albums.filter(data => data.title === this.props.albumData.title).length !== 0) {
-            return (
-                <View style={ownStyles.textStyle}>
-                    <Text style={{ color: 'black', margin: 5 }}>Álbum agregado</Text>
-                </View>
-            );
-        } */
+        if (this.props.albums !== null) {
+            if (this.props.albums.filter(album => album.title === this.props.albumData.title).length !== 0) {
+                return (
+                    <View style={ownStyles.textStyle}>
+                        <Text style={{ color: 'black', margin: 5 }}>Álbum agregado</Text>
+                    </View>
+                );
+            }
+        }
 
         return (
             <CardSection>
@@ -78,7 +89,7 @@ class AlbumSum extends Component {
     }
 }
 
-/* const ownStyles = {
+const ownStyles = {
     viewStyle: {
         backgroundColor: '#0277BD',
         flex: 1,
@@ -91,12 +102,12 @@ class AlbumSum extends Component {
         alignItems: 'center',
         marginBottom: 5
     }
-}; */
+};
 
 const mapStateToProps = state => {
-    const { loading } = state.albums;
+    const { loading, albums } = state.albums;
 
-    return { loading };
+    return { loading, albums };
 };
 
 // when ever any piece of state upodates, the connect helper will rerun mapStateToProps

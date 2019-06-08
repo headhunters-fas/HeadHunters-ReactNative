@@ -10,6 +10,7 @@ import {
 
 
 export const albumAdd = (album) => {
+    console.log("ALBUMSITO", album);
     return () => {
         AsyncStorage.getItem('id_token')
         .then(res => { 
@@ -35,7 +36,7 @@ export const albumsFetch = () => {
                     Authorization: res
                 }
             })
-            .then((resp) => { console.log("ALVUMS", resp); dispatch({ type: ALBUM_FETCH_SUCCESS, payload: resp.data }); })
+            .then((resp) => { dispatch({ type: ALBUM_FETCH_SUCCESS, payload: resp.data }); })
             .catch(err => console.log(err));
         })
         .catch(err => console.log(err));

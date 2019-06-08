@@ -30,7 +30,7 @@ class AlbumDetail extends Component {
     // }
 
     render() {
-        const { title, artist, thumbnail_image, image, url } = this.props.Item;
+        const { title, artist, thumbnailImage, image } = this.props.Item;
         const { headerContentStyle, thumbnailStyle, thumbnailContainerStyle,
             headerTextStyle, imageStyle } = styles;
         return (
@@ -39,15 +39,12 @@ class AlbumDetail extends Component {
                     <Card>
                         <CardSection>
                             <View style={thumbnailContainerStyle}>
-                                <Image style={thumbnailStyle} source={{ uri: thumbnail_image }} />
+                                <Image style={thumbnailStyle} source={{ uri: thumbnailImage }} />
                             </View>
                             <View style={headerContentStyle}>
                                 <Text style={headerTextStyle}>{title}</Text>
                                 <Text>{artist} </Text>
                             </View>
-                            <Button2 onPress={() => Linking.openURL(url)}>
-                                Comprar
-                            </Button2>
                         </CardSection>
 
                         <CardSection>
