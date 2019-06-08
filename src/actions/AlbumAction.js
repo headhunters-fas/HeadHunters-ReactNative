@@ -43,16 +43,21 @@ export const albumsFetch = () => {
     };
 };
 
-export const albumDelete = ({ title, uid }) => {
-    const { currentUser } = firebase.auth();
-
+export const albumDelete = ({ title, id }) => {
     return () => {
-        firebase.database().ref(`/users/${currentUser.uid}/albums/${uid}`)
-        .remove()
-        .then(() => {
-            toastMessage(`Se ha eliminado ${title} de la playlist.`);
-            Actions.myList({ type: 'pop' });
-        });
+        AsyncStorage.getItem('id_token')
+        .then(res => { 
+            axios.delete(`http://10.0.2.2:8080/api/users/albums/${id}`, {
+                headers: {
+                    Authorization: res
+                }
+            })
+            .then(() => { 
+                toastMessage(`Se ha eliminado ${title} de la playlist.`);
+                Actions.myList({ type: 'pop' });
+             });
+        })
+        .catch(err => console.log(err));
     };
 };
 

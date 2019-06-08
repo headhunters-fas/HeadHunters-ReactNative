@@ -9,18 +9,16 @@ const ITEM_WIDTH = Dimensions.get('window').width;
 class Genre extends Component {
     state = {
         columns: 2,
-        fGenres: [],
-        genres: [],
-        loading: true
+        fGenres: [
+            'Country',
+            'Rock'
+        ],
+        genres: [
+            'Country',
+            'Rock'
+        ]
     }
 
-    componentWillMount() {
-        axios.get('https://albumapp-api.herokuapp.com/albums/genres')
-      .then(response => 
-        this.setState({ genres: response.data, 
-        fGenres: response.data, 
-        loading: false }));
-    }
 
     filterGenres = (text) => {
         const { fGenres } = this.state;
@@ -31,46 +29,26 @@ class Genre extends Component {
     };
 
     render() {
-        const { columns, genres, loading } = this.state;
-
-        if (loading) {
-            return (
-                <View style={styles.viewStyle}>
-                    <Text style={{ color: 'white', marginTop: 5 }}>
-                        Cargando...
-                    </Text>
-                </View>
-            );
-        }
-
-        if (genres) {
-            return (
-                <View style={styles.container}>
-                    <SearchBar
-                        placeholder='ingrese título de álbum...'
-                        containerStyle={styles.searchBarStyle} 
-                        inputStyle={{ backgroundColor: 'white' }}
-                        onChangeText={this.filterGenres}
-                    />
-                    <FlatList
-                        numColumns={columns}
-                        data={genres}
-                        renderItem={({ item }) => {
-                            return <ListGenreGrid itemWidth={(ITEM_WIDTH - (20 * columns)) / 2} genre={item} />;
-                        }}
-                        keyExtractor={index => index.uid}
-                    />
-                </View>
-            );
-        }
+        const { columns, genres } = this.state;
 
         return (
-            <View style={styles.viewStyle}>
-                <Text style={{ color: 'white', marginTop: 5 }}>
-                    No existen géneros para mostrar.
-                </Text>
+            <View style={styles.container}>
+                <SearchBar
+                    placeholder='ingrese título de álbum...'
+                    containerStyle={styles.searchBarStyle} 
+                    inputStyle={{ backgroundColor: 'white' }}
+                    onChangeText={this.filterGenres}
+                />
+                <FlatList
+                    numColumns={columns}
+                    data={genres}
+                    renderItem={({ item }) => {
+                        return <ListGenreGrid itemWidth={(ITEM_WIDTH - (20 * columns)) / 2} genre={item} />;
+                    }}
+                    keyExtractor={index => index.uid}
+                />
             </View>
-        ); 
+        );
     }
    
 }

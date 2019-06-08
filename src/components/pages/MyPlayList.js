@@ -19,6 +19,10 @@ class MyPlayList extends Component {
         this.props.albumsFetch();
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps);
+    }
+
     filterAlbums = (text) => {
         const { albums } = this.props;
         const filteredAlbums = albums.filter(album => {
@@ -61,7 +65,7 @@ class MyPlayList extends Component {
                         renderItem={({ item }) => {
                             return <ListItemGrid itemWidth={(ITEM_WIDTH - (20 * columns)) / 2} album={item} />;
                         }}
-                        keyExtractor={index => index.uid}
+                        keyExtractor={index => index.id}
                     />
                 </View>
             );
@@ -98,13 +102,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-    const albums = _.map(state.albums.albums, (val, uid) => {
-        return { ...val, uid }; //{ title: 'taylor', artis: 'swift'}
-    });
+    const { loading, albums } = state.albums;
 
-    const { loading } = state.albums;
-
-    return { albums, loading };
+    return { loading, albums };
 };
 
 // when ever any piece of state upodates, the connect helper will rerun mapStateToProps

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { Content, List, ListItem, Thumbnail } from 'native-base';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { genreAll } from '../../actions';
 import WelcomeDialog from './welcomeDialog';
 
 class Menu extends Component {    
@@ -9,6 +12,11 @@ class Menu extends Component {
                 source={require('../../img/avatar.png')}
                 large
         />); 
+    }
+
+    displayAllGenres() {
+        this.props.genreAll();    
+        Actions.albumList();
     }
 
     renderWelcomeDialog() {
@@ -25,10 +33,10 @@ class Menu extends Component {
                 <View style={{ flex: 2 }}>
                     <Content>
                         <List>
-                            <ListItem>
+                            <ListItem onPress={this.displayAllGenres.bind(this)}>
                                 <Text>Los más escuchados</Text>
                             </ListItem>
-                            <ListItem>
+                            <ListItem onPress={() => Actions.genre()}>
                                 <Text>buscar por género</Text>
                             </ListItem>
                             <ListItem>
@@ -42,4 +50,10 @@ class Menu extends Component {
     }
 }
 
-export default Menu;
+const mapStateToProps = ({ albums }) => {
+    const { genre, account } = albums;
+  
+    return { genre, account };
+  };
+
+export default connect(mapStateToProps, { genreAll })(Menu);

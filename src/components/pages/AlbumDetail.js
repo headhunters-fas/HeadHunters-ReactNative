@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { albumDelete } from '../../actions';
+import { albumDelete, albumsFetch } from '../../actions';
 import { Text, View, Image, ScrollView, Linking } from 'react-native';
 import { CardSection, Button, Card, Confirm } from '../common';
 import { Button2 } from '../common/Button2';
@@ -11,10 +11,11 @@ class AlbumDetail extends Component {
     state = { showModal: false };
 
     onAccept() {
-        const { title, uid } = this.props.Item;
+        const { title, id } = this.props.Item;
 
-        this.props.albumDelete({ title, uid });
+        this.props.albumDelete({ title, id });
         this.setState({ showModal: false });
+        this.props.albumsFetch();
     }
 
     onDecline() {
@@ -77,5 +78,5 @@ class AlbumDetail extends Component {
     }
 }
 
-export default connect(null, { albumDelete })(AlbumDetail);
+export default connect(null, { albumDelete, albumsFetch })(AlbumDetail);
 
