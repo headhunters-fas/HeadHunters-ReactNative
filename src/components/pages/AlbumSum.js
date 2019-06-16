@@ -10,6 +10,7 @@ import Helpers from '../../lib/helpers';
 let DEMO_TOKEN;
 
 class AlbumSum extends Component {
+    state = { loading: true };
 
     async componentDidMount() {
         DEMO_TOKEN = await AsyncStorage.getItem('id_token');
@@ -43,6 +44,16 @@ class AlbumSum extends Component {
         this.props.albumsFetch();
     }
 
+    load() {
+        if (this.props.albums !== null) {
+            if (this.props.albums.filter(album => album.title === this.props.albumData.title).length !== 0) {
+                this.setState({ loading: false });
+            } else {
+                this.setState({ loading: false });
+            }
+        }
+    }
+
     renderButton() {    
         if (this.props.albums !== null) {
             if (this.props.albums.filter(album => album.title === this.props.albumData.title).length !== 0) {
@@ -67,7 +78,11 @@ class AlbumSum extends Component {
         const { title, artist, thumbnailImage, image } = this.props.albumData;
         const { headerContentStyle, thumbnailStyle, thumbnailContainerStyle,
             headerTextStyle, imageStyle } = styles;
-
+        
+        if (this.state.loading) {
+            this.load();
+            return <View />;
+        }
         return (
             <Card>
                 <CardSection>

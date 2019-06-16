@@ -1,11 +1,14 @@
 import {
     PROFILE_FETHCED,
     PROFILE_SAVED,
-    ACCOUNT_SELECTED
+    ACCOUNT_SELECTED,
+    USERS_FETCHED
 } from '../actions/types';
 
 const INITIAL_STATE = {
+    loading: true,
     profile: null,
+    users: [],
     account: '',
 };
 
@@ -17,6 +20,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, account: action.payload };
         case PROFILE_SAVED:
             return { state };
+        case USERS_FETCHED:
+            return { ...state, loading: false, users: action.payload };
         default:
             return state;
     }

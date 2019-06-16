@@ -2,6 +2,7 @@ import axios from 'axios';
 import { AsyncStorage, ToastAndroid } from 'react-native';
 import {
     PROFILE_FETHCED,
+    USERS_FETCHED,
     PROFILE_SAVED,
     ACCOUNT_SELECTED
 } from './types';
@@ -57,6 +58,25 @@ export const updateProfile = (profile) => {
                     ToastAndroid.SHORT,
                     ToastAndroid.CENTER
                 );
+            })
+            .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
+    };
+};
+
+export const getAllArtists = () => {
+    return (dispatch) => {
+        AsyncStorage.getItem('id_token')
+        .then(res => { 
+            axios.get('http://10.0.2.2:8080/api/users/getAll', {
+                headers: {
+                    Authorization: res
+                }
+            })
+            .then((resp) => { 
+                console.log(resp.data);
+                dispatch({ type: USERS_FETCHED, payload: resp.data }); 
             })
             .catch(err => console.log(err));
         })

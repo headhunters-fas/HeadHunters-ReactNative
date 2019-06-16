@@ -10,6 +10,7 @@ export const SIGNUP_USER = 'signup_user';
 export const ALBUM_ADD = 'album_add';
 export const PROFILE_FETHCED = 'profile_fetched';
 export const PROFILE_SAVED = 'profile_saved';
+export const USERS_FETCHED = 'users_fetched';
 export const ALBUM_FETCH_SUCCESS = 'album_fetch_success';
 export const ACCOUNT_SELECTED = 'account_selected';
 export const FETCHING_ALBUMS = 'fetching_albums';

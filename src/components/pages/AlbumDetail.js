@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { albumDelete, albumsFetch } from '../../actions';
-import { Text, View, Image, ScrollView, Linking } from 'react-native';
+import { Text, View, Image, ScrollView } from 'react-native';
 import { CardSection, Button, Card, Confirm } from '../common';
-import { Button2 } from '../common/Button2';
 import { styles } from '../common/AlbumStyles';
 
 class AlbumDetail extends Component {
@@ -25,10 +24,6 @@ class AlbumDetail extends Component {
     OnButtonPress() {
         Actions.songList({ album: this.props.Item });
     }
-
-    // OnButtonPress() {
-    //     Actions.player({ tracks: this.props.Item.songs, album: this.props.Item.title });
-    // }
 
     render() {
         const { title, artist, thumbnailImage, image } = this.props.Item;

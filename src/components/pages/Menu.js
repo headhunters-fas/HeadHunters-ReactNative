@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { Content, List, ListItem, Thumbnail } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { genreAll } from '../../actions';
+import { genreAll, getUserProfile } from '../../actions';
 import WelcomeDialog from './welcomeDialog';
 
 class Menu extends Component {    
@@ -14,13 +14,19 @@ class Menu extends Component {
         />); 
     }
 
+    componentDidMount() {
+        this.props.getUserProfile();
+    }
+
     displayAllGenres() {
         this.props.genreAll();    
         Actions.albumList();
     }
 
     renderWelcomeDialog() {
-        return <WelcomeDialog />;
+        if (this.props.profile === '') {
+            return <WelcomeDialog />;
+        }  
     }
 
     render() {
@@ -42,7 +48,10 @@ class Menu extends Component {
                             <ListItem onPress={() => Actions.profile()}>
                                 <Text>Perfil</Text>
                             </ListItem>
-                            <ListItem>
+                            <ListItem onPress={() => Actions.artists()}>
+                                <Text>Artistas</Text>
+                            </ListItem>
+                            <ListItem onPress={() => Actions.auth()}>
                                 <Text>Cerrar sesión</Text>
                             </ListItem>
                         </List>
@@ -53,10 +62,11 @@ class Menu extends Component {
     }
 }
 
-const mapStateToProps = ({ albums }) => {
-    const { genre, account } = albums;
+const mapStateToProps = ({ albums, userForm }) => {
+    const { genre } = albums;
+    const { profile, account } = userForm;
   
-    return { genre, account };
+    return { genre, account, profile };
   };
 
-export default connect(mapStateToProps, { genreAll })(Menu);
+export default connect(mapStateToProps, { genreAll, getUserProfile })(Menu);

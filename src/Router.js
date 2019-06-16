@@ -5,10 +5,12 @@ import LoginForm from './components/pages/LoginForm';
 import SignupForm from './components/pages/SignupForm';
 import AlbumList from './components/pages/AlbumList';
 import MyPlayList from './components/pages/MyPlayList';
+import ArtistDetail from './components/pages/ArtistDetail';
 import AlbumDetail from './components/pages/AlbumDetail';
 import Player from './components/Player';
 import Menu from './components/pages/Menu';
 import Profile from './components/pages/Profile';
+import Artists from './components/pages/Artists';
 import Genre from './components/pages/Genre';
 import SongList from './components/pages/SongList';
 import UploadMusic from './components/pages/UploadMusic';
@@ -68,8 +70,10 @@ const RouterComponent = () => {
                         />     
                     </Scene>
                     <Scene key="albumDetail" component={AlbumDetail} title="Detalle de álbum" />
+                    <Scene key="artistDetail" component={ArtistDetail} title="Detalle de artista" />
                     <Scene key="player" component={Player} hideNavBar />
                     <Scene key="profile" component={Profile} title="Perfil" />
+                    <Scene key="artists" component={Artists} title="Artistas" />
                     <Scene key="songList" component={SongList} title="Lista de canciones" />
                 </Stack>              
             </Stack>
