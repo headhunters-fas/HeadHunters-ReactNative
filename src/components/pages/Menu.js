@@ -39,6 +39,9 @@ class Menu extends Component {
                             <ListItem onPress={() => Actions.genre()}>
                                 <Text>buscar por género</Text>
                             </ListItem>
+                            <ListItem onPress={() => Actions.profile()}>
+                                <Text>Perfil</Text>
+                            </ListItem>
                             <ListItem>
                                 <Text>Cerrar sesión</Text>
                             </ListItem>

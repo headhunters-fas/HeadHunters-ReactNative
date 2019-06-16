@@ -1,4 +1,7 @@
+/* eslint-disable no-unused-expressions */
 import React, { Component } from 'react';
+import { getUserProfile, updateProfile } from '../../actions';
+import { connect } from 'react-redux';
 import _ from 'lodash';
 import { 
     View, 
@@ -57,32 +60,34 @@ class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            imagePath: '',
-            name: '',
-            lastname: props.avatar !== '' ? props.lastname : '',
-            email: props.avatar !== '' ? props.email : '',
-            bio: props.avatar !== '' ? props.bio : '', 
-            uid: ''    
+            id: 0,
+            username: '',
+            accountType: '',
+            bandName: '',
+            bandMembers: '',
+            bandDescription: '',
+            bandImageUrl: '', 
+            linkToSample: ''    
         };
     }
 
     async componentDidMount() {
-        console.log(this.props.avatar);
+        this.props.getUserProfile();
+    }
 
-        try {
-            const user = await firebase.auth().currentUser;
-            
-            Helpers.getUserName(user.uid, (name) => {
-                this.setState({ name: name });
-            });
-
-            const { currentUser } = await firebase.auth();
-            this.setState({
-                uid: currentUser.uid
-            });
-        } catch (error) {
-            console.log(error);
-        }
+    componentWillReceiveProps(nextProps) {
+        const { id, username, accountType, bandName, bandMembers,
+            bandDescription, bandImageUrl, linkToSample } = nextProps.profile;
+        this.setState({
+            id,
+            username,
+            accountType,
+            bandName,
+            bandMembers,
+            bandDescription,
+            bandImageUrl, 
+            linkToSample 
+        });
     }
 
     openImagePicker() {
@@ -112,26 +117,19 @@ class Profile extends Component {
     }
 
     saveForm() {
-        const { name, lastname, email, bio, uid, imagePath } = this.state;
-        if (uid) {
-            try {
-                name ? Helpers.setUserName(uid, name) : null;
-                bio ? Helpers.setUserBio(uid, bio) : null;
-                email ? Helpers.setUserEmail(uid, email) : null;
-                lastname ? Helpers.setUserLastname(uid, lastname) : null;
-                imagePath ? 
-                    uploadImage(imagePath, `${uid}.jpg`)
-                    .then((responseData) => {
-                        Helpers.setImageUrl(uid, responseData);
-                    })
-                    .done()
-                : null;
-
-                toastMessage('¡Tu datos han sido actualizados!');
-            } catch (error) {
-                console.log(error);
-            }
-        }  
+        const { id, username, accountType, bandName, bandMembers, bandDescription,
+            bandImageUrl, linkToSample } = this.state;
+        const profile = {
+            id, 
+            username, 
+            accountType, 
+            bandName, 
+            bandMembers, 
+            bandDescription,
+            bandImageUrl, 
+            linkToSample  
+        };
+        this.props.updateProfile(profile);
     }
 
     renderAvatar() {
@@ -166,8 +164,8 @@ class Profile extends Component {
                     autoCorrect={false} //we disable the autocorrect from ios or android
                     style={styles.textInput}
                     placeholder='nombres'
-                    value={this.state.name}
-                    onChangeText={(name) => this.setState({ name })}
+                    value={this.state.username}
+                    onChangeText={(username) => this.setState({ username })}
                 />
                 <TextInput
                     underlineColorAndroid='rgba(0,0,0,0)'
@@ -175,9 +173,9 @@ class Profile extends Component {
                     placeholderTextColor="#ffffff"
                     autoCorrect={false} //we disable the autocorrect from ios or android
                     style={styles.textInput}
-                    placeholder='apellidos'
-                    value={this.state.lastname}
-                    onChangeText={(lastname) => this.setState({ lastname })}
+                    placeholder='tipo de cuenta'
+                    value={this.state.accountType}
+                    onChangeText={(accountType) => this.setState({ accountType })}
                 />
                 <TextInput
                     underlineColorAndroid='rgba(0,0,0,0)'
@@ -185,13 +183,19 @@ class Profile extends Component {
                     placeholderTextColor="#ffffff"
                     autoCorrect={false} //we disable the autocorrect from ios or android
                     style={styles.textInput}
-                    type='email-address'
-                    placeholder='email@gmail.com'
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    value={this.state.email}
-                    onChangeText={(email) => this.setState({ email })}
-                    
+                    placeholder='Nombre de la banda'
+                    value={this.state.bandName}
+                    onChangeText={(bandName) => this.setState({ bandName })}
+                />
+                <TextInput
+                    underlineColorAndroid='rgba(0,0,0,0)'
+                    selectionColor="#fff"
+                    placeholderTextColor="#ffffff"
+                    autoCorrect={false} //we disable the autocorrect from ios or android
+                    style={styles.textInput}
+                    placeholder='Miembros de la banda'
+                    value={this.state.bandMembers}
+                    onChangeText={(bandMembers) => this.setState({ bandMembers })}
                 />
                 <TextInput
                     multiline={true}
@@ -201,9 +205,9 @@ class Profile extends Component {
                     placeholderTextColor="#ffffff"
                     autoCorrect={false} //we disable the autocorrect from ios or android
                     style={styles.textArea}
-                    placeholder='Ingresa algo sobre tí'
-                    value={this.state.bio}
-                    onChangeText={(bio) => this.setState({ bio })}
+                    placeholder='Ingresa la descripción de tu banda'
+                    value={this.state.bandDescription}
+                    onChangeText={(bandDescription) => this.setState({ bandDescription })}
                 />
 
                 <TouchableOpacity
@@ -267,12 +271,11 @@ const styles = StyleSheet.create({
     }
 });
 
-const toastMessage = (texto) => {
-    ToastAndroid.showWithGravity(
-        texto,
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER
-    );
+const mapStateToProps = state => {
+    const { profile } = state.userForm;
+
+    return { profile };
 };
 
-export default Profile;
+
+export default connect(mapStateToProps, { getUserProfile, updateProfile })(Profile);

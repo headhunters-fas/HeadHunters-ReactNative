@@ -6,12 +6,10 @@ import {
     Text,
     View,
 } from "react-native";
-import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { Dialog, ConfirmDialog } from "react-native-simple-dialogs";
 import AlbaLogo from '../../img/AlbumLogo.png';
-import { setAccount } from '../../actions';
-import Helpers from '../../lib/helpers';
+import { setAccount, saveProfile } from '../../actions';
 
 const styles = StyleSheet.create({
     container: {
@@ -45,11 +43,6 @@ class WelcomeDialog extends Component {
         uid: ''
     }
 
-    async componentDidMount() {
-        const user = await firebase.auth().currentUser;
-        this.setState({ uid: user.uid });
-    }
-
     openDialog = (show) => {
         this.setState({ showDialog: show });
         this.setState({ showConfirm: true });
@@ -61,13 +54,19 @@ class WelcomeDialog extends Component {
 
     optionBanda = () => {
         this.props.setAccount('banda');
-        Helpers.setAccountType(this.state.uid, 'banda');
+        const profile = {
+            accountType: 'banda'
+        };
+        this.props.saveProfile(profile);
         this.openConfirm(false);
     }
 
     optionConsumidor = () => {
         this.props.setAccount('consumidor');
-        Helpers.setAccountType(this.state.uid, 'consumidor');
+        const profile = {
+            accountType: 'consumidor'
+        };
+        this.props.saveProfile(profile);
         this.openConfirm(false);
     }
 
@@ -140,4 +139,4 @@ class WelcomeDialog extends Component {
     }
 }
 
-export default connect(null, { setAccount })(WelcomeDialog);
+export default connect(null, { setAccount, saveProfile })(WelcomeDialog);

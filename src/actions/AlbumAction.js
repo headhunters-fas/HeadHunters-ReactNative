@@ -2,7 +2,6 @@ import { ToastAndroid, AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import axios from 'axios';
 import {
-    ACCOUNT_SELECTED,
     GENRE_CHANGED,
     GENRE_ALL,
     ALBUM_FETCH_SUCCESS
@@ -72,13 +71,6 @@ export const genreAll = () => {
     return {
         type: GENRE_ALL,
         payload: 'todos los generos'
-    };
-};
-
-export const setAccount = (value) => {
-    return {
-        type: ACCOUNT_SELECTED,
-        payload: value
     };
 };
 
