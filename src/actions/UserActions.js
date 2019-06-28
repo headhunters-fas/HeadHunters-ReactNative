@@ -11,7 +11,7 @@ export const getUserProfile = () => {
     return (dispatch) => {
         AsyncStorage.getItem('id_token')
         .then(res => { 
-            axios.get('http://10.0.2.2:8080/api/users/profile', {
+            axios.get('https://headhunters-api.herokuapp.com/api/users/profile', {
                 headers: {
                     Authorization: res
                 }
@@ -29,7 +29,7 @@ export const saveProfile = (profile) => {
     return (dispatch) => {
         AsyncStorage.getItem('id_token')
         .then(res => { 
-            axios.post('http://10.0.2.2:8080/api/users/profile', profile, {
+            axios.post('https://headhunters-api.herokuapp.com/api/users/profile', profile, {
                 headers: {
                     Authorization: res
                 }
@@ -47,7 +47,7 @@ export const updateProfile = (profile) => {
     return () => {
         AsyncStorage.getItem('id_token')
         .then(res => { 
-            axios.put(`http://10.0.2.2:8080/api/users/${profile.id}`, profile, {
+            axios.put(`https://headhunters-api.herokuapp.com/api/users/${profile.id}`, profile, {
                 headers: {
                     Authorization: res
                 }
@@ -69,7 +69,7 @@ export const getAllArtists = () => {
     return (dispatch) => {
         AsyncStorage.getItem('id_token')
         .then(res => { 
-            axios.get('http://10.0.2.2:8080/api/users/getAll', {
+            axios.get('https://headhunters-api.herokuapp.com/api/users/getAll', {
                 headers: {
                     Authorization: res
                 }

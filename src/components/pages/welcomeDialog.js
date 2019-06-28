@@ -7,8 +7,8 @@ import {
     View,
 } from "react-native";
 import { connect } from 'react-redux';
-import { Dialog, ConfirmDialog } from "react-native-simple-dialogs";
-import AlbaLogo from '../../img/AlbumLogo.png';
+import { Dialog } from "react-native-simple-dialogs";
+import HeadHuntersLogo from '../../img/HeadHuntersLogo.png';
 import { setAccount, saveProfile } from '../../actions';
 
 const styles = StyleSheet.create({
@@ -70,6 +70,15 @@ class WelcomeDialog extends Component {
         this.openConfirm(false);
     }
 
+    optionHeadhunter = () => {
+        this.props.setAccount('heandunter');
+        const profile = {
+            accountType: 'heandunter'
+        };
+        this.props.saveProfile(profile);
+        this.openConfirm(false);
+    }
+
     render() {
         return (
             <View style={ styles.container }>
@@ -81,59 +90,78 @@ class WelcomeDialog extends Component {
                                 justifyContent: "center"
                             }
                         }
-                    title="¡Bienvenido!"
                     animationType="fade"
                     onTouchOutside={ () => this.openDialog(false) }
                     visible={ this.state.showDialog }
                 >
                     <Image
-                        source={AlbaLogo}
+                        source={HeadHuntersLogo}
                         style={
                             {
-                                width: 99,
-                                height: 87,
-                                marginTop: 10,
+                                width: 300,
+                                height: 250,
+                                marginTop: 2,
                                 resizeMode: "contain",
                             }
                         }
                     />
+                    <Text style={ { marginBottom: 15, fontSize: 18 } }>
+                        ¡Bienvenido a HeadHunters!
+                    </Text>
+
                     <Text style={ { marginVertical: 30 } }>
-                        Bienvenido a álbum app, una aplicación en la que podrás gestionar tus canciones y escuchar a tus artistas favoritos y, ¿por que no?,
-                         hacer que el mundo de escuche. ¿Listo para empezar?
+                        Si estás buscando la mejor app streaming ya puedes parar. ¡Escucha las nuevas tendencias,
+                        encuentra una banda que te guste y apóyala!
                     </Text>
                     <Button
                         onPress={ () => this.openDialog(false) }
                         style={{ marginTop: 10, width: 100, paddingHorizontal: 16, }}
-                        title="Sí"
+                        title="Continuar"
                     />
                 </Dialog>
 
-                <ConfirmDialog
+                <Dialog
                     titleStyle={{ textAlign: 'center' }}
-                    title="Confirmar tipo de cuenta"
+                    contentStyle={
+                            {
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }
+                        }
+                    animationType="fade"
                     visible={ this.state.showConfirm }
-                    negativeButton={
-                        {   
-                            title: "Consumidor",
-                            onPress: this.optionConsumidor,
-                            // disabled: true,
-                            titleStyle: {
-                                color: "blue",
-                                colorDisabled: "aqua",
-                            },
-                            style: {
-                                backgroundColor: "transparent",
-                                backgroundColorDisabled: "transparent",
-                            },
+                >
+                    <Image
+                        source={HeadHuntersLogo}
+                        style={
+                            {
+                                width: 300,
+                                height: 250,
+                                marginTop: 2,
+                                resizeMode: "contain",
+                            }
                         }
-                    }
-                    positiveButton={
-                        {
-                            title: "Banda",
-                            onPress: this.optionBanda,
-                        }
-                    }
-                />
+                    />
+                    <Text style={ { marginBottom: 15, fontSize: 18 } }>
+                        Para empezar, necesitamos saber su tipo de cuenta:
+                    </Text>
+
+                    <Text 
+                        style={ { marginVertical: 10, color: 'blue' }}
+                        onPress={ () => this.optionConsumidor()}>
+                        Solo soy un fan
+                    </Text>
+                    <Text 
+                        style={ { marginVertical: 10, color: 'blue' }}
+                        onPress={ () => this.optionBanda()}>
+                        Soy parte de una banda o solista
+                    </Text>
+                    <Text 
+                        style={ { marginVertical: 10, color: 'blue' }}
+                        onPress={ () => this.optionHeadhunter()}>
+                        HeadHunter
+                    </Text>
+                </Dialog>
             </View>
         );
     }

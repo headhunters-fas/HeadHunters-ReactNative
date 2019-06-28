@@ -14,7 +14,7 @@ export const albumAdd = (album) => {
         AsyncStorage.getItem('id_token')
         .then(res => { 
             console.log(res);
-            axios.post('http://10.0.2.2:8080/api/users/albums', album, {
+            axios.post('https://headhunters-api.herokuapp.com/api/users/albums', album, {
                 headers: {
                     Authorization: res //the token is a variable which holds the token
                 }
@@ -30,7 +30,7 @@ export const albumsFetch = () => {
     return (dispatch) => {
         AsyncStorage.getItem('id_token')
         .then(res => { 
-            axios.get('http://10.0.2.2:8080/api/users/albums/all', {
+            axios.get('https://headhunters-api.herokuapp.com/api/users/albums/all', {
                 headers: {
                     Authorization: res
                 }
@@ -46,7 +46,7 @@ export const albumDelete = ({ title, id }) => {
     return () => {
         AsyncStorage.getItem('id_token')
         .then(res => { 
-            axios.delete(`http://10.0.2.2:8080/api/users/albums/${id}`, {
+            axios.delete(`https://headhunters-api.herokuapp.com/api/users/albums/${id}`, {
                 headers: {
                     Authorization: res
                 }

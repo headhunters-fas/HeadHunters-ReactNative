@@ -96,7 +96,7 @@ export default class Helpers {
     //For Album Api post and put
 
     static updateAlbumLikes(id, likes, DEMO_TOKEN) {
-        axios.put(`http://10.0.2.2:8080/api/albums/${id}`, {
+        axios.put(`https://headhunters-api.herokuapp.com/api/albums/${id}`, {
             likes: likes + 1
         }, {
             headers: {

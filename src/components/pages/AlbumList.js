@@ -26,7 +26,7 @@ class AlbumList extends Component {
       Actions.refresh({ title: genre });
     }
     
-    axios.get(`http://10.0.2.2:8080/api/albums?genre=${genre}`, {
+    axios.get(`https://headhunters-api.herokuapp.com/api/albums?genre=${genre}`, {
       headers: {
         Authorization: DEMO_TOKEN //the token is a variable which holds the token
       }
@@ -37,7 +37,7 @@ class AlbumList extends Component {
   async componentWillReceiveProps(nextProps) {
     DEMO_TOKEN = await AsyncStorage.getItem('id_token');
     if (this.state.genre !== nextProps.genre) {
-      axios.get(`http://10.0.2.2:8080/api/albums?genre=${nextProps.genre}`, {
+      axios.get(`https://headhunters-api.herokuapp.com/api/albums?genre=${nextProps.genre}`, {
       headers: {
         Authorization: DEMO_TOKEN //the token is a variable which holds the token
       }

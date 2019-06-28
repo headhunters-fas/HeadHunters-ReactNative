@@ -30,11 +30,18 @@ class Menu extends Component {
     }
 
     render() {
+        console.log(this.props.profile);
         return (
             <View style={{ flex: 1 }}>
                 {this.renderWelcomeDialog()}
                 <View style={{ flex: 1, backgroundColor: '#2c3e50', justifyContent: 'center', alignItems: 'center' }}>
                     {this.mostrarAvatar()}
+                    <Text style={{ color: 'white' }}>
+                    {this.props.profile !== null ? this.props.profile.username : '' }
+                    </Text>
+                    <Text style={{ color: 'white' }}>
+                    {this.props.profile !== null ? this.props.profile.accountType : '' }
+                    </Text>
                 </View>
                 <View style={{ flex: 2 }}>
                     <Content>

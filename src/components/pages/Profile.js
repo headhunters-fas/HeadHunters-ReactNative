@@ -198,6 +198,26 @@ class Profile extends Component {
                     onChangeText={(bandMembers) => this.setState({ bandMembers })}
                 />
                 <TextInput
+                    underlineColorAndroid='rgba(0,0,0,0)'
+                    selectionColor="#fff"
+                    placeholderTextColor="#ffffff"
+                    autoCorrect={false} //we disable the autocorrect from ios or android
+                    style={styles.textInput}
+                    placeholder='url imagen de la banda'
+                    value={this.state.bandImageUrl}
+                    onChangeText={(bandImageUrl) => this.setState({ bandImageUrl })}
+                />
+                <TextInput
+                    underlineColorAndroid='rgba(0,0,0,0)'
+                    selectionColor="#fff"
+                    placeholderTextColor="#ffffff"
+                    autoCorrect={false} //we disable the autocorrect from ios or android
+                    style={styles.textInput}
+                    placeholder='ingresa link a demo'
+                    value={this.state.linkToSample}
+                    onChangeText={(linkToSample) => this.setState({ linkToSample })}
+                />
+                <TextInput
                     multiline={true}
                     numberOfLines={10}
                     underlineColorAndroid='rgba(0,0,0,0)'

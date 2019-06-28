@@ -40,7 +40,7 @@ export const confirmPasswordChanged = (text) => {
 export const loginUser = (newUser) => async dispatch => {
     dispatch({ type: LOGIN_USER });
     try {
-        const res = await axios.post('http://10.0.2.2:8080/api/users/login', newUser);
+        const res = await axios.post('https://headhunters-api.herokuapp.com/api/users/login', newUser);
         loginUserSuccess(dispatch, res);
     } catch (error) {
         loginUserFail(dispatch, error.response.data);
@@ -50,7 +50,7 @@ export const loginUser = (newUser) => async dispatch => {
 export const signupUser = (newUser) => async dispatch => {
     dispatch({ type: SIGNUP_USER });
     try {
-        const res = await axios.post('http://10.0.2.2:8080/api/users/register', newUser);
+        const res = await axios.post('https://headhunters-api.herokuapp.com/api/users/register', newUser);
         signupUserSuccess(dispatch, res);
     } catch (error) {
         signupUserFail(dispatch, error.response.data);
