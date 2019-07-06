@@ -52,7 +52,10 @@ class ListGenreGrid extends Component {
                 >   
                     <Fade fadeIt={1000}>
                         <FadeIn>
-                            <Image style={imgStyle(itemWidth).imgStyles} source={thumbnail} />
+                            <Image
+                                style={imgStyle(itemWidth).imgStyles} source={thumbnail} 
+                                resizeMethod="resize"
+                            />
                         </FadeIn>
                         <View>
                             <Text style={{ color: 'white', marginTop: 5 }}>{genre}</Text>

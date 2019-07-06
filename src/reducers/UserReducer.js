@@ -19,7 +19,7 @@ export default (state = INITIAL_STATE, action) => {
         case ACCOUNT_SELECTED:
             return { ...state, account: action.payload };
         case PROFILE_SAVED:
-            return { state };
+            return state;
         case USERS_FETCHED:
             return { ...state, loading: false, users: action.payload };
         default:

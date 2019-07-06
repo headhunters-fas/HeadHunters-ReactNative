@@ -8,8 +8,10 @@ import {
 } from "react-native";
 import { connect } from 'react-redux';
 import { Dialog } from "react-native-simple-dialogs";
+import firebase from 'firebase';
 import HeadHuntersLogo from '../../img/HeadHuntersLogo.png';
-import { setAccount, saveProfile } from '../../actions';
+import { setAccount, saveProfile, getUserProfile } from '../../actions';
+import Helpers from '../../lib/helpers';
 
 const styles = StyleSheet.create({
     container: {
@@ -43,6 +45,11 @@ class WelcomeDialog extends Component {
         uid: ''
     }
 
+    async componentDidMount() {
+        const user = await firebase.auth().currentUser;
+        this.setState({ uid: user.uid });
+    }
+
     openDialog = (show) => {
         this.setState({ showDialog: show });
         this.setState({ showConfirm: true });
@@ -58,6 +65,7 @@ class WelcomeDialog extends Component {
             accountType: 'banda'
         };
         this.props.saveProfile(profile);
+        Helpers.setAccountType(this.state.uid, 'banda');
         this.openConfirm(false);
     }
 
@@ -67,6 +75,7 @@ class WelcomeDialog extends Component {
             accountType: 'consumidor'
         };
         this.props.saveProfile(profile);
+        Helpers.setAccountType(this.state.uid, 'consumidor');
         this.openConfirm(false);
     }
 
@@ -76,6 +85,7 @@ class WelcomeDialog extends Component {
             accountType: 'heandunter'
         };
         this.props.saveProfile(profile);
+        Helpers.setAccountType(this.state.uid, 'heandunter');
         this.openConfirm(false);
     }
 
@@ -167,4 +177,4 @@ class WelcomeDialog extends Component {
     }
 }
 
-export default connect(null, { setAccount, saveProfile })(WelcomeDialog);
+export default connect(null, { setAccount, saveProfile, getUserProfile })(WelcomeDialog);

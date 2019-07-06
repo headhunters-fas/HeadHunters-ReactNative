@@ -1,4 +1,5 @@
 import axios from 'axios';
+import firebase from 'firebase';
 import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import {
@@ -41,6 +42,9 @@ export const loginUser = (newUser) => async dispatch => {
     dispatch({ type: LOGIN_USER });
     try {
         const res = await axios.post('https://headhunters-api.herokuapp.com/api/users/login', newUser);
+        firebase.auth().signInWithEmailAndPassword(newUser.username, newUser.password)
+        .then(user => console.log(user))
+        .catch(err => console.log(err));
         loginUserSuccess(dispatch, res);
     } catch (error) {
         loginUserFail(dispatch, error.response.data);
@@ -51,6 +55,9 @@ export const signupUser = (newUser) => async dispatch => {
     dispatch({ type: SIGNUP_USER });
     try {
         const res = await axios.post('https://headhunters-api.herokuapp.com/api/users/register', newUser);
+        firebase.auth().createUserWithEmailAndPassword(newUser.username, newUser.password)
+        .then(user => console.log(user))
+        .catch(err => console.log(err));
         signupUserSuccess(dispatch, res);
     } catch (error) {
         signupUserFail(dispatch, error.response.data);

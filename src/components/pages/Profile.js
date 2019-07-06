@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-expressions */
 import React, { Component } from 'react';
-import { getUserProfile, updateProfile } from '../../actions';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import ImagePicker from 'react-native-image-picker';
+import firebase from 'firebase';
+import RNFetchBlob from 'react-native-fetch-blob';
 import { 
     View, 
     Text, 
@@ -11,14 +12,11 @@ import {
     Image, 
     TextInput,
     Platform,
-    ToastAndroid, 
     Dimensions,
     ScrollView
 } from 'react-native';
-
-import ImagePicker from 'react-native-image-picker';
-import firebase from 'firebase';
-import RNFetchBlob from 'react-native-fetch-blob';
+import _ from 'lodash';
+import { getUserProfile, updateProfile } from '../../actions';
 import Helpers from '../../lib/helpers';
 import Avatar from '../../img/avatar.png';
 
@@ -67,12 +65,23 @@ class Profile extends Component {
             bandMembers: '',
             bandDescription: '',
             bandImageUrl: '', 
-            linkToSample: ''    
+            linkToSample: '',
+            uid: '',
+            imagePath: '',
+
         };
     }
 
     async componentDidMount() {
         this.props.getUserProfile();
+        try {
+            const { currentUser } = await firebase.auth();
+            this.setState({
+                uid: currentUser.uid
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -118,7 +127,16 @@ class Profile extends Component {
 
     saveForm() {
         const { id, username, accountType, bandName, bandMembers, bandDescription,
-            bandImageUrl, linkToSample } = this.state;
+            bandImageUrl, linkToSample, imagePath, uid } = this.state;
+        if (uid) {
+            imagePath ? 
+                    uploadImage(imagePath, `${uid}.jpg`)
+                    .then((responseData) => {
+                        Helpers.setImageUrl(uid, responseData);
+                    })
+                    .done()
+                : null;
+        }
         const profile = {
             id, 
             username, 
@@ -130,6 +148,134 @@ class Profile extends Component {
             linkToSample  
         };
         this.props.updateProfile(profile);
+    }
+
+    baseForm = (view) => {
+        return (
+            <ScrollView contentContainerStyle={{ alignItems: 'center' }} style={styles.container}>
+                <TouchableOpacity
+                    onPress={this.openImagePicker.bind(this)}
+                    style={{ marginBottom: 40, marginTop: 20 }}
+                >
+                    <View style={{ alignItems: 'center' }}>
+                        {this.renderAvatar()}
+                        <Text style={{ color: 'white' }}>Avatar </Text>
+                    </View>
+                </TouchableOpacity>
+
+                <Text style={{ color: 'white', marginBottom: 10 }}>
+                        Correo de usuario:
+                </Text>
+                <TextInput
+                    underlineColorAndroid='rgba(0,0,0,0)'
+                    selectionColor="#fff"
+                    placeholderTextColor="#ffffff"
+                    autoCorrect={false} //we disable the autocorrect from ios or android
+                    style={{ ...styles.textInput, color: '#002F70' }}
+                    placeholder='nombres'
+                    editable={false}
+                    value={this.state.username}
+                    onChangeText={(username) => this.setState({ username })}
+                />
+                <Text style={{ color: 'white', marginBottom: 10 }}>
+                    Tipo de cuenta
+                </Text>
+                <TextInput
+                    underlineColorAndroid='rgba(0,0,0,0)'
+                    selectionColor="#fff"
+                    placeholderTextColor="#ffffff"
+                    autoCorrect={false} //we disable the autocorrect from ios or android
+                    style={{ ...styles.textInput, color: '#002F70' }}
+                    placeholder='tipo de cuenta'
+                    editable={false}
+                    value={this.state.accountType}
+                    onChangeText={(accountType) => this.setState({ accountType })}
+                />
+                {view}
+                <Text style={{ color: 'white', marginBottom: 10 }}>
+                        Descripción
+                    </Text>
+                    <TextInput
+                        multiline={true}
+                        numberOfLines={10}
+                        underlineColorAndroid='rgba(0,0,0,0)'
+                        selectionColor="#fff"
+                        placeholderTextColor="#ffffff"
+                        autoCorrect={false} //we disable the autocorrect from ios or android
+                        style={styles.textArea}
+                        placeholder='Ingresa la descripción de tu banda'
+                        value={this.state.bandDescription}
+                        onChangeText={(bandDescription) => this.setState({ bandDescription })}
+                    />
+                <TouchableOpacity
+                    style={styles.buttonStyle}
+                    onPress={this.saveForm.bind(this)}
+                >
+                    <Text style={styles.buttonText}>Guardar</Text>
+                </TouchableOpacity>
+            </ScrollView>
+        ); 
+    }
+
+    bandForm = () => {
+        return (
+            this.baseForm(
+                <View style={{ alignItems: 'center' }}>
+                    <Text style={{ color: 'white', marginBottom: 10 }}>
+                    Nombre de banda
+                    </Text>
+                    <TextInput
+                        underlineColorAndroid='rgba(0,0,0,0)'
+                        selectionColor="#fff"
+                        placeholderTextColor="#ffffff"
+                        autoCorrect={false} //we disable the autocorrect from ios or android
+                        style={styles.textInput}
+                        placeholder='Nombre de la banda'
+                        value={this.state.bandName}
+                        onChangeText={(bandName) => this.setState({ bandName })}
+                    />
+                    <Text style={{ color: 'white', marginBottom: 10 }}>
+                        Miembros de la banda
+                    </Text>
+                    <TextInput
+                        underlineColorAndroid='rgba(0,0,0,0)'
+                        selectionColor="#fff"
+                        placeholderTextColor="#ffffff"
+                        autoCorrect={false} //we disable the autocorrect from ios or android
+                        style={styles.textInput}
+                        placeholder='Miembros de la banda'
+                        value={this.state.bandMembers}
+                        onChangeText={(bandMembers) => this.setState({ bandMembers })}
+                    />
+                    <Text style={{ color: 'white', marginBottom: 10 }}>
+                        Url de poster de la banda
+                    </Text>
+                    <TextInput
+                        underlineColorAndroid='rgba(0,0,0,0)'
+                        selectionColor="#fff"
+                        placeholderTextColor="#ffffff"
+                        autoCorrect={false} //we disable the autocorrect from ios or android
+                        style={styles.textInput}
+                        placeholder='url imagen de la banda'
+                        value={this.state.bandImageUrl}
+                        onChangeText={(bandImageUrl) => this.setState({ bandImageUrl })}
+                    />
+                    <Text style={{ color: 'white', marginBottom: 10 }}>
+                        Sample music link
+                    </Text>
+                    <TextInput
+                        underlineColorAndroid='rgba(0,0,0,0)'
+                        selectionColor="#fff"
+                        placeholderTextColor="#ffffff"
+                        autoCorrect={false} //we disable the autocorrect from ios or android
+                        style={styles.textInput}
+                        placeholder='ingresa link a demo'
+                        value={this.state.linkToSample}
+                        onChangeText={(linkToSample) => this.setState({ linkToSample })}
+                    />
+                </View>
+            )
+        );
     }
 
     renderAvatar() {
@@ -146,98 +292,7 @@ class Profile extends Component {
     }
 
     render() {
-        return (
-            <ScrollView contentContainerStyle={{ alignItems: 'center' }} style={styles.container}>
-                <TouchableOpacity
-                    onPress={this.openImagePicker.bind(this)}
-                    style={{ marginBottom: 40, marginTop: 20 }}
-                >
-                    <View style={{ alignItems: 'center' }}>
-                        {this.renderAvatar()}
-                        <Text style={{ color: 'white' }}>Avatar </Text>
-                    </View>
-                </TouchableOpacity>
-                <TextInput
-                    underlineColorAndroid='rgba(0,0,0,0)'
-                    selectionColor="#fff"
-                    placeholderTextColor="#ffffff"
-                    autoCorrect={false} //we disable the autocorrect from ios or android
-                    style={styles.textInput}
-                    placeholder='nombres'
-                    value={this.state.username}
-                    onChangeText={(username) => this.setState({ username })}
-                />
-                <TextInput
-                    underlineColorAndroid='rgba(0,0,0,0)'
-                    selectionColor="#fff"
-                    placeholderTextColor="#ffffff"
-                    autoCorrect={false} //we disable the autocorrect from ios or android
-                    style={styles.textInput}
-                    placeholder='tipo de cuenta'
-                    value={this.state.accountType}
-                    onChangeText={(accountType) => this.setState({ accountType })}
-                />
-                <TextInput
-                    underlineColorAndroid='rgba(0,0,0,0)'
-                    selectionColor="#fff"
-                    placeholderTextColor="#ffffff"
-                    autoCorrect={false} //we disable the autocorrect from ios or android
-                    style={styles.textInput}
-                    placeholder='Nombre de la banda'
-                    value={this.state.bandName}
-                    onChangeText={(bandName) => this.setState({ bandName })}
-                />
-                <TextInput
-                    underlineColorAndroid='rgba(0,0,0,0)'
-                    selectionColor="#fff"
-                    placeholderTextColor="#ffffff"
-                    autoCorrect={false} //we disable the autocorrect from ios or android
-                    style={styles.textInput}
-                    placeholder='Miembros de la banda'
-                    value={this.state.bandMembers}
-                    onChangeText={(bandMembers) => this.setState({ bandMembers })}
-                />
-                <TextInput
-                    underlineColorAndroid='rgba(0,0,0,0)'
-                    selectionColor="#fff"
-                    placeholderTextColor="#ffffff"
-                    autoCorrect={false} //we disable the autocorrect from ios or android
-                    style={styles.textInput}
-                    placeholder='url imagen de la banda'
-                    value={this.state.bandImageUrl}
-                    onChangeText={(bandImageUrl) => this.setState({ bandImageUrl })}
-                />
-                <TextInput
-                    underlineColorAndroid='rgba(0,0,0,0)'
-                    selectionColor="#fff"
-                    placeholderTextColor="#ffffff"
-                    autoCorrect={false} //we disable the autocorrect from ios or android
-                    style={styles.textInput}
-                    placeholder='ingresa link a demo'
-                    value={this.state.linkToSample}
-                    onChangeText={(linkToSample) => this.setState({ linkToSample })}
-                />
-                <TextInput
-                    multiline={true}
-                    numberOfLines={10}
-                    underlineColorAndroid='rgba(0,0,0,0)'
-                    selectionColor="#fff"
-                    placeholderTextColor="#ffffff"
-                    autoCorrect={false} //we disable the autocorrect from ios or android
-                    style={styles.textArea}
-                    placeholder='Ingresa la descripción de tu banda'
-                    value={this.state.bandDescription}
-                    onChangeText={(bandDescription) => this.setState({ bandDescription })}
-                />
-
-                <TouchableOpacity
-                    style={styles.buttonStyle}
-                    onPress={this.saveForm.bind(this)}
-                >
-                    <Text style={styles.buttonText}>Guardar</Text>
-                </TouchableOpacity>
-            </ScrollView>
-        );
+        return this.state.accountType === 'banda' ? this.bandForm() : this.baseForm();
     }
 }
 

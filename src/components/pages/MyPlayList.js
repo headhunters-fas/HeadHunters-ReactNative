@@ -20,7 +20,8 @@ class MyPlayList extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
+        console.log("NEXTPROPS", nextProps);
+        this.props.albumsFetch();
     }
 
     filterAlbums = (text) => {

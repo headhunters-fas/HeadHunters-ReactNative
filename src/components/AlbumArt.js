@@ -13,9 +13,10 @@ import {
 const AlbumArt = ({ url, onPress }) => (
   <View style={styles.container}>
     <TouchableOpacity onPress={onPress}>
-      <Image
+      <Image 
         style={styles.image}
         source={{uri: url}}
+        resizeMethod="resize"
       />
     </TouchableOpacity>
   </View>
