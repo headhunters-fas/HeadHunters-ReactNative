@@ -26,7 +26,7 @@ export const albumAdd = (album) => {
     };
 };
 
-export const albumsFetch = () => {
+export const albumsFetch = (pop = false) => {
     return (dispatch) => {
         AsyncStorage.getItem('id_token')
         .then(res => { 
@@ -35,7 +35,15 @@ export const albumsFetch = () => {
                     Authorization: res
                 }
             })
-            .then((resp) => { dispatch({ type: ALBUM_FETCH_SUCCESS, payload: resp.data }); })
+            .then((resp) => { 
+                dispatch({ 
+                    type: ALBUM_FETCH_SUCCESS, 
+                    payload: resp.data });  
+                }).then(() => {
+                    if (pop) {
+                        Actions.myList({ type: 'pop' });   
+                    }
+                })
             .catch(err => console.log(err));
         })
         .catch(err => console.log(err));
@@ -53,8 +61,7 @@ export const albumDelete = ({ title, id }) => {
             })
             .then(() => { 
                 toastMessage(`Se ha eliminado ${title} de la playlist.`);
-                Actions.myList({ type: 'pop' });
-             });
+             }).catch(err => console.log(err));
         })
         .catch(err => console.log(err));
     };

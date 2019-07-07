@@ -74,14 +74,14 @@ class Profile extends Component {
 
     async componentDidMount() {
         this.props.getUserProfile();
-        try {
-            const { currentUser } = await firebase.auth();
-            this.setState({
-                uid: currentUser.uid
-            });
-        } catch (error) {
-            console.log(error);
-        }
+        // try {
+        //     const { currentUser } = await firebase.auth();
+        //     this.setState({
+        //         uid: currentUser.uid
+        //     });
+        // } catch (error) {
+        //     console.log(error);
+        // }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -99,44 +99,44 @@ class Profile extends Component {
         });
     }
 
-    openImagePicker() {
-        const options = {
-            title: '¡Agrega tu avatar!',
-            storageOptions: {
-                skipBackup: true,
-                path: 'images'
-            }
-        };
+    // openImagePicker() {
+    //     const options = {
+    //         title: '¡Agrega tu avatar!',
+    //         storageOptions: {
+    //             skipBackup: true,
+    //             path: 'images'
+    //         }
+    //     };
 
-        ImagePicker.showImagePicker(options, (response) => {
-            if (response.didCancel) {
-                console.log('User canceled image Picker');
-            } else if (response.error) {
-                console.log('Error' + response.error);
-            } else if (response.customButton) {
-                console.log('User tapped custom button' + response.customButton);
-            } else {
-                this.setState({ 
-                    imagePath: response.uri,
-                    imageHeight: response.height,
-                    imageWidth: response.width
-                });
-            }
-        });
-    }
+    //     ImagePicker.showImagePicker(options, (response) => {
+    //         if (response.didCancel) {
+    //             console.log('User canceled image Picker');
+    //         } else if (response.error) {
+    //             console.log('Error' + response.error);
+    //         } else if (response.customButton) {
+    //             console.log('User tapped custom button' + response.customButton);
+    //         } else {
+    //             this.setState({ 
+    //                 imagePath: response.uri,
+    //                 imageHeight: response.height,
+    //                 imageWidth: response.width
+    //             });
+    //         }
+    //     });
+    // }
 
     saveForm() {
         const { id, username, accountType, bandName, bandMembers, bandDescription,
-            bandImageUrl, linkToSample, imagePath, uid } = this.state;
-        if (uid) {
-            imagePath ? 
-                    uploadImage(imagePath, `${uid}.jpg`)
-                    .then((responseData) => {
-                        Helpers.setImageUrl(uid, responseData);
-                    })
-                    .done()
-                : null;
-        }
+            bandImageUrl, linkToSample } = this.state;
+        // if (uid) {
+        //     imagePath ? 
+        //             uploadImage(imagePath, `${uid}.jpg`)
+        //             .then((responseData) => {
+        //                 Helpers.setImageUrl(uid, responseData);
+        //             })
+        //             .done()
+        //         : null;
+        // }
         const profile = {
             id, 
             username, 

@@ -17,7 +17,6 @@ const INITIAL_STATE = {
 }; //piece of state which is default
 
 export default (state = INITIAL_STATE, action) => {
-    console.log(action);
     switch (action.type) { //whatever value we return from this reducer will be our aplication state
         case EMAIL_CHANGED: //make a new object, take all of the properties of my existing state object and throw them into that object,
             return { ...state, email: action.payload }; //define property email, give it a value of the reducer and toss it on top of the new state

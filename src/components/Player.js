@@ -10,7 +10,7 @@ import TrackDetails from './TrackDetails';
 import SeekBar from './SeekBar';
 import Controls from './Controls';
 import Video from 'react-native-video';
-import { Actions } from 'react-native-router-flux';
+//import { Actions } from 'react-native-router-flux';
 
 export default class Player extends Component {
   constructor(props) {
@@ -78,17 +78,18 @@ export default class Player extends Component {
     }
   }
 
-  goBack() {
-    Actions.pop();
-  }
-
   render() {
     const track = this.props.tracks[this.state.selectedTrack];
     const video = this.state.isChanging ? null : (
-      <Video source={{uri: track.audioUrl}} // Can be a URL or a local file.
+      <Video 
+        source={{ uri: track.audioUrl }} // Can be a URL or a local file.
         ref="audioElement"
         paused={this.state.paused}               // Pauses playback entirely.
-        resizeMode="cover"           // Fill the whole screen at aspect ratio.
+        muted={false}
+        resizeMode="cover"  
+        ignoreSilentSwitch={"ignore"}
+        playWhenInactive={true}
+        playInBackground={true}         // Fill the whole screen at aspect ratio.
         repeat={true}                // Repeat forever.
         onLoadStart={this.loadStart} // Callback when video starts to load
         onLoad={this.setDuration.bind(this)}    // Callback when video loads
@@ -101,7 +102,7 @@ export default class Player extends Component {
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
-        <Header message={`Tocando ${this.props.album}`} onDownPress={this.goBack.bind(this)} />
+        <Header message={`Tocando ${this.props.album}`} /*onDownPress={this.goBack.bind(this)}*/ />
         <AlbumArt url={track.albumArtUrl} />
         <TrackDetails title={track.title} artist={track.artist} /> 
         <SeekBar

@@ -2,12 +2,12 @@ package com.albumapp;
 
 import android.app.Application;
 
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.imagepicker.ImagePickerPackage;
-import com.brentvatne.react.ReactVideoPackage;
 import com.facebook.react.ReactApplication;
-import com.react.rnspinkit.RNSpinkitPackage;
+import com.brentvatne.react.ReactVideoPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
+import com.react.rnspinkit.RNSpinkitPackage;
+import com.imagepicker.ImagePickerPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -28,11 +28,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactVideoPackage(),
+            new VectorIconsPackage(),
             new RNSpinkitPackage(),
-              new VectorIconsPackage(),
-                new ReactVideoPackage(),
-                  new ImagePickerPackage(),
-                    new RNFetchBlobPackage()
+            new ImagePickerPackage(),
+            new RNFetchBlobPackage()
       );
     }
 

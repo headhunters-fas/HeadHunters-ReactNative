@@ -65,7 +65,7 @@ class WelcomeDialog extends Component {
             accountType: 'banda'
         };
         this.props.saveProfile(profile);
-        Helpers.setAccountType(this.state.uid, 'banda');
+        //Helpers.setAccountType(this.state.uid, 'banda');
         this.openConfirm(false);
     }
 
@@ -75,7 +75,7 @@ class WelcomeDialog extends Component {
             accountType: 'consumidor'
         };
         this.props.saveProfile(profile);
-        Helpers.setAccountType(this.state.uid, 'consumidor');
+        //Helpers.setAccountType(this.state.uid, 'consumidor');
         this.openConfirm(false);
     }
 
@@ -85,7 +85,7 @@ class WelcomeDialog extends Component {
             accountType: 'heandunter'
         };
         this.props.saveProfile(profile);
-        Helpers.setAccountType(this.state.uid, 'heandunter');
+        //Helpers.setAccountType(this.state.uid, 'heandunter');
         this.openConfirm(false);
     }
 

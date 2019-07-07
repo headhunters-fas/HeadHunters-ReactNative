@@ -19,11 +19,6 @@ class MyPlayList extends Component {
         this.props.albumsFetch();
     }
 
-    componentWillReceiveProps(nextProps) {
-        console.log("NEXTPROPS", nextProps);
-        this.props.albumsFetch();
-    }
-
     filterAlbums = (text) => {
         const { albums } = this.props;
         const filteredAlbums = albums.filter(album => {

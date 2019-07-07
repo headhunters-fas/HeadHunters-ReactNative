@@ -1,7 +1,6 @@
 package com.albumapp;
 
 import com.facebook.react.ReactActivity;
-import com.brentvatne.react.ReactVideoPackage;
 
 public class MainActivity extends ReactActivity {
 
@@ -12,5 +11,10 @@ public class MainActivity extends ReactActivity {
     @Override
     protected String getMainComponentName() {
         return "AlbumApp";
+    }
+
+    @Override
+    public void invokeDefaultOnBackPressed() {
+        moveTaskToBack(true);
     }
 }

@@ -12,6 +12,7 @@ class AlbumDetail extends Component {
     onAccept() {
         const { title, id } = this.props.Item;
         this.props.albumDelete({ title, id });
+        this.props.albumsFetch(true);
         this.setState({ showModal: false });
     }
 
