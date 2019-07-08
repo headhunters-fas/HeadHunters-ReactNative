@@ -154,7 +154,7 @@ class Profile extends Component {
         return (
             <ScrollView contentContainerStyle={{ alignItems: 'center' }} style={styles.container}>
                 <TouchableOpacity
-                    onPress={this.openImagePicker.bind(this)}
+                    //onPress={this.openImagePicker.bind(this)}
                     style={{ marginBottom: 40, marginTop: 20 }}
                 >
                     <View style={{ alignItems: 'center' }}>
