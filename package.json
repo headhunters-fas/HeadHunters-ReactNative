@@ -7,7 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "firebase": "^3.3.2",
     "lodash": "^4.17.11",
     "native-base": "^2.8.1",
