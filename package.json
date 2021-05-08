@@ -9,7 +9,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "firebase": "^3.3.2",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "native-base": "^2.8.1",
     "react": "16.3.1",
     "react-native": "^0.57.4",
